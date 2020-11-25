@@ -1,5 +1,15 @@
 package io.github.rbajek.rasa.sdk.action.form;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.rbajek.rasa.sdk.CollectingDispatcher;
 import io.github.rbajek.rasa.sdk.action.Action;
 import io.github.rbajek.rasa.sdk.action.form.slot.mapper.AbstractSlotMapping;
@@ -15,10 +25,6 @@ import io.github.rbajek.rasa.sdk.exception.ActionExecutionRejectionException;
 import io.github.rbajek.rasa.sdk.exception.RasaException;
 import io.github.rbajek.rasa.sdk.util.CollectionsUtils;
 import io.github.rbajek.rasa.sdk.util.SerializationUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 /**
  * An abstract form action class
@@ -340,7 +346,7 @@ public abstract class AbstractFormAction implements Action {
             return Collections.emptyMap();
         }
 
-        String slotToFill = tracker.getSlotValue(REQUESTED_SLOT, String.class);
+        String slotToFill = tracker.getSlotValue(REQUESTED_SLOT, String.class).get();
         LOGGER.debug("Trying to extract requested slot '{}' ...", slotToFill);
 
         //get mapping for requested slot

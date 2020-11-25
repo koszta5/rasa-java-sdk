@@ -1,16 +1,20 @@
 package io.github.rbajek.rasa.sdk.dto;
 
-import io.github.rbajek.rasa.sdk.util.StringUtils;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.github.rbajek.rasa.sdk.util.DateUtil;
+import io.github.rbajek.rasa.sdk.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter @Setter @ToString
 public class Tracker {
@@ -90,11 +94,19 @@ public class Tracker {
         return getSlotValue(slotName, Object.class);
     }
 
-    public <T> T getSlotValue(String slotName, Class<T> type) {
+    public  <T> Optional<T>getSlotValue(String slotName, Class<T> type) {
         if(this.slots != null && this.slots.containsKey(slotName)) {
-            return type.cast(this.slots.get(slotName));
+            if (LocalDateTime.class.isAssignableFrom(type)){
+                if (hasSlotValue(slotName)){
+                    return (Optional<T>) Optional.ofNullable(DateUtil.parseDate(this.slots.get(slotName).toString()));
+                }
+                else {
+                    return Optional.empty();
+                }
+            }
+            return Optional.of(type.cast(this.slots.get(slotName)));
         }
-        return null;
+        return Optional.empty();
     }
 
     public boolean hasSlotValue(String slotName) {
@@ -124,7 +136,7 @@ public class Tracker {
     @Getter @Setter @ToString
     public static class Event {
         private String event;
-        private Long timestamp;
+        private Double timestamp;
     }
 
     @Getter @Setter @ToString
