@@ -1,5 +1,13 @@
 package io.github.rbajek.rasa.sdk;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import io.github.rbajek.rasa.sdk.action.Action;
 import io.github.rbajek.rasa.sdk.dto.ActionRequest;
 import io.github.rbajek.rasa.sdk.dto.ActionResponse;
@@ -7,14 +15,6 @@ import io.github.rbajek.rasa.sdk.dto.Domain;
 import io.github.rbajek.rasa.sdk.dto.Tracker;
 import io.github.rbajek.rasa.sdk.dto.event.AbstractEvent;
 import io.github.rbajek.rasa.sdk.dto.event.SlotSet;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ActionExecutorTest {
 
@@ -36,8 +36,8 @@ class ActionExecutorTest {
     private static class CustomAction implements Action {
 
         @Override
-        public String name() {
-            return ACTION_NAME;
+        public String[] name() {
+            return new String[]{ACTION_NAME};
         }
 
         public String someCommonFeature() {

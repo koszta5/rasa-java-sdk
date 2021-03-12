@@ -1,15 +1,22 @@
 package io.github.rbajek.rasa.sdk;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.rbajek.rasa.sdk.action.Action;
 import io.github.rbajek.rasa.sdk.dto.ActionRequest;
 import io.github.rbajek.rasa.sdk.dto.ActionResponse;
 import io.github.rbajek.rasa.sdk.dto.event.AbstractEvent;
 import io.github.rbajek.rasa.sdk.exception.RasaException;
 import io.github.rbajek.rasa.sdk.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 /**
  * Action executor
@@ -22,11 +29,26 @@ public class ActionExecutor {
     private Map<String, Action> actions = new HashMap<>();
 
     public void registerAction(Action action) {
-        if(StringUtils.isNullOrEmpty(action.name())) {
+        if(isEmpty(action.name())) {
             throw new RasaException("An action must implement a name");
         }
-        this.actions.put(action.name(), action);
+        for (String nameOfOne: action.name()){
+            if (this.actions.get(nameOfOne) != null && this.actions.get(nameOfOne) != action){
+                throw new RuntimeException("Duplicate actions mapping for "+nameOfOne);
+            }
+            this.actions.put(nameOfOne, action);
+
+        }
         LOGGER.info("Registered action for '{}'.", action.name());
+    }
+
+    private boolean isEmpty(String[] name) {
+        for (String nameOfOne: name){
+            if (StringUtils.isNullOrEmpty(nameOfOne)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void validateEvents(List<AbstractEvent> events, String actionName) {

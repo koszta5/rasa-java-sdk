@@ -162,7 +162,7 @@ public abstract class AbstractFormAction implements Action {
             return new ArrayList<>();
         } else {
             LOGGER.debug("Activated the form '{}'", this.name());
-            events.add(new Form(this.name()));
+            events.add(new Form(this.name()[0]));
 
             //collect values of required slots filled before activation
             Map<String, Object> preFilledSlots = new HashMap<>();
@@ -448,8 +448,8 @@ public abstract class AbstractFormAction implements Action {
     }
 
     @Override
-    public String name() {
-        return this.formName;
+    public String[] name() {
+        return new String[]{this.formName};
     }
 
     /**
