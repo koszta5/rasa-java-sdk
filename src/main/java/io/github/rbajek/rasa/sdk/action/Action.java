@@ -1,12 +1,12 @@
 package io.github.rbajek.rasa.sdk.action;
 
+import java.util.List;
+import java.util.Map;
+
 import io.github.rbajek.rasa.sdk.CollectingDispatcher;
 import io.github.rbajek.rasa.sdk.dto.Domain;
 import io.github.rbajek.rasa.sdk.dto.Tracker;
 import io.github.rbajek.rasa.sdk.dto.event.AbstractEvent;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Next action to be taken in response to a dialogue state.
@@ -18,9 +18,9 @@ public interface Action {
     /**
      * Unique identifier of this action.
      *
-     * @return a name of this action
+     * @return a name of this action - can be multiple names - the same action can react to multiple actions
      */
-    String name();
+    String[] name();
 
     /**
      * Execute the side effects of this action
